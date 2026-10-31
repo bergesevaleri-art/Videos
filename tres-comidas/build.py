@@ -147,7 +147,7 @@ doc = f'''<!doctype html>
       .fondo {{ position: absolute; inset: 0; background: var(--blanco); overflow: hidden; }}
       #fondo-a, #fondo-b {{ position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; opacity: 0.28; }}
 
-      #titulo {{ position: absolute; left: 0; top: 330px; width: 1080px; text-align: center; font-weight: 700; letter-spacing: -0.02em; line-height: 1.02; font-size: 124px; }}
+      #titulo {{ position: absolute; left: 0; top: 330px; width: 1080px; text-align: center; font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; font-size: 100px; }}
       .foto {{ position: absolute; top: 700px; width: 316px; height: 560px; border-radius: 24px; overflow: hidden; }}
       .foto img, #expande img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
       #f1 {{ left: 46px; }} #f2 {{ left: 382px; }} #f3 {{ left: 718px; }}
@@ -162,8 +162,8 @@ doc = f'''<!doctype html>
         background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.78) 42%, rgba(255,255,255,0) 100%); }}
       .hora {{ position: absolute; left: 0; top: 250px; width: 1080px; text-align: center; font-size: 46px; font-weight: 600; color: var(--secundario); letter-spacing: 0.02em; }}
       .mini-star {{ width: 40px; height: 40px; vertical-align: -6px; margin-right: 14px; }}
-      .palabra {{ position: absolute; left: 0; top: 318px; width: 1080px; text-align: center; font-size: 168px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }}
-      .paso {{ position: absolute; left: 0; top: 520px; width: 1080px; text-align: center; font-size: 38px; font-weight: 600; }}
+      .palabra {{ position: absolute; left: 0; top: 318px; width: 1080px; text-align: center; font-size: 132px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }}
+      .paso {{ position: absolute; left: 0; top: 486px; width: 1080px; text-align: center; font-size: 38px; font-weight: 600; }}
 
       .cortina {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: var(--terciario); z-index: 8; }}
       .cortina img {{ position: absolute; left: 470px; top: 890px; width: 140px; height: 140px; }}
