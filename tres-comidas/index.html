@@ -9,32 +9,36 @@
       /* paleta del design system Nido */
       :root { --pincipal: #9b4c26; --secundario: #7b745a; --terciario: #e0b7a6; --blanco: #ffffff; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--terciario); }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--blanco); }
       body { font-family: "Comfortaa", sans-serif; color: var(--pincipal); }
       .ch { opacity: 0; }
 
-      /* apertura: fondo rosa Nido, título y las tres fotos */
-      #apertura { position: absolute; inset: 0; background: var(--terciario); }
-      #titulo { position: absolute; left: 0; top: 330px; width: 1080px; text-align: center; font-weight: 700; letter-spacing: -0.02em; line-height: 1.02; }
-      #t1 { font-size: 124px; }
-      #t2 { font-size: 124px; }
+      /* fondo: la foto del desayuno con opacidad baja */
+      .fondo { position: absolute; inset: 0; background: var(--blanco); overflow: hidden; }
+      #fondo-a, #fondo-b { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; opacity: 0.28; }
+
+      #titulo { position: absolute; left: 0; top: 330px; width: 1080px; text-align: center; font-weight: 700; letter-spacing: -0.02em; line-height: 1.02; font-size: 124px; }
       .foto { position: absolute; top: 700px; width: 316px; height: 560px; border-radius: 24px; overflow: hidden; }
-      .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .foto img, #expande img { width: 100%; height: 100%; object-fit: cover; display: block; }
       #f1 { left: 46px; } #f2 { left: 382px; } #f3 { left: 718px; }
       .pie { position: absolute; top: 1290px; width: 316px; text-align: center; font-size: 40px; font-weight: 600; }
       #pie1 { left: 46px; } #pie2 { left: 382px; } #pie3 { left: 718px; }
+      #expande { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; z-index: 6; }
 
-      /* momentos: texto directo sobre la foto, con un velo blanco suave arriba */
+      .toma { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; z-index: 1; }
+
       .momento { position: absolute; inset: 0; z-index: 3; }
       .velo { position: absolute; left: 0; top: 0; width: 1080px; height: 820px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.7) 42%, rgba(255,255,255,0) 100%); }
+        background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.78) 42%, rgba(255,255,255,0) 100%); }
       .hora { position: absolute; left: 0; top: 250px; width: 1080px; text-align: center; font-size: 46px; font-weight: 600; color: var(--secundario); letter-spacing: 0.02em; }
       .mini-star { width: 40px; height: 40px; vertical-align: -6px; margin-right: 14px; }
       .palabra { position: absolute; left: 0; top: 318px; width: 1080px; text-align: center; font-size: 168px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
-      .paso { position: absolute; left: 0; top: 520px; width: 1080px; text-align: center; font-size: 38px; font-weight: 600; color: var(--pincipal); }
+      .paso { position: absolute; left: 0; top: 520px; width: 1080px; text-align: center; font-size: 38px; font-weight: 600; }
 
-      /* cierre */
-      #cierre { position: absolute; inset: 0; background: var(--terciario); z-index: 4; }
+      .cortina { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: var(--terciario); z-index: 8; }
+      .cortina img { position: absolute; left: 470px; top: 890px; width: 140px; height: 140px; }
+
+      #cierre { z-index: 5; }
       #logo { position: absolute; left: 370px; top: 560px; width: 340px; height: auto; }
       #cta1 { position: absolute; left: 0; top: 880px; width: 1080px; text-align: center; font-size: 104px; font-weight: 700; letter-spacing: -0.02em; }
       #cta2 { position: absolute; left: 0; top: 1020px; width: 1080px; text-align: center; font-size: 56px; font-weight: 500; }
@@ -43,10 +47,12 @@
     </style>
   </head>
   <body>
-    <div data-hf-id="hf-ye7c" id="root" data-composition-id="main" data-start="0" data-duration="15.13" data-width="1080" data-height="1920">
-      <audio data-hf-id="hf-lrnj" id="pista" class="clip" src="assets/audio/pista.m4a" data-start="0" data-duration="15.13" data-track-index="5" data-volume="1"></audio>
+    <div data-hf-id="hf-bujf" id="root" data-composition-id="main" data-start="0" data-duration="21.00" data-width="1080" data-height="1920">
+      <audio data-hf-id="hf-1n2f" id="musica" class="clip" src="assets/audio/musica.m4a" data-start="0" data-duration="21.00" data-track-index="10" data-volume="0.8"></audio>
+      <audio data-hf-id="hf-994f" id="efectos" class="clip" src="assets/audio/sfx.m4a" data-start="0" data-duration="21.00" data-track-index="11" data-volume="1"></audio>
 
-      <div data-hf-id="hf-mths" id="apertura" class="clip" data-start="0" data-duration="3.0" data-track-index="1" data-track-kind="graphics" style="z-index: 2">
+      <div data-hf-id="hf-32vm" id="apertura" class="clip fondo" data-start="0" data-duration="4.50" data-track-index="1" data-track-kind="graphics" style="z-index: 2">
+        <img data-hf-id="hf-ixj9" id="fondo-a" src="assets/fotos/fondo.jpg" alt="">
         <div data-hf-id="hf-hyey" id="titulo">
           <div data-hf-id="hf-fe40" id="t1"><span data-hf-id="hf-6hdc" id="a0" class="ch">m</span><span data-hf-id="hf-kag7" id="a1" class="ch">i</span><span data-hf-id="hf-1q4k" id="a2" class="ch">s</span><span data-hf-id="hf-eu0p" id="a3" class="ch">m</span><span data-hf-id="hf-hyo2" id="a4" class="ch">o</span><span data-hf-id="hf-ai34" id="a5" class="ch">&#160;</span><span data-hf-id="hf-0us1" id="a6" class="ch">p</span><span data-hf-id="hf-ng9e" id="a7" class="ch">l</span><span data-hf-id="hf-hhmk" id="a8" class="ch">a</span><span data-hf-id="hf-uthk" id="a9" class="ch">t</span><span data-hf-id="hf-hrap" id="a10" class="ch">o</span></div>
           <div data-hf-id="hf-q9ln" id="t2"><span data-hf-id="hf-g0r1" id="b0" class="ch">3</span><span data-hf-id="hf-w46t" id="b1" class="ch">&#160;</span><span data-hf-id="hf-l4pr" id="b2" class="ch">c</span><span data-hf-id="hf-r4ko" id="b3" class="ch">o</span><span data-hf-id="hf-1v27" id="b4" class="ch">m</span><span data-hf-id="hf-bc6g" id="b5" class="ch">i</span><span data-hf-id="hf-locy" id="b6" class="ch">d</span><span data-hf-id="hf-55xy" id="b7" class="ch">a</span><span data-hf-id="hf-lbet" id="b8" class="ch">s</span></div>
@@ -59,100 +65,150 @@
         <div data-hf-id="hf-oxo0" id="pie3" class="pie">cena</div>
       </div>
 
-      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-ed53" id="v-desayuno" class="clip" src="assets/clips/desayuno.mp4" muted playsinline data-start="3.0" data-duration="4.0" data-track-index="0" style="position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; z-index: 1"></video>
-      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-9vzf" id="v-merienda" class="clip" src="assets/clips/merienda.mp4" muted playsinline data-start="7.0" data-duration="4.0" data-track-index="0" style="position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; z-index: 1"></video>
-      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-1c24" id="v-cena" class="clip" src="assets/clips/cena.mp4" muted playsinline data-start="11.0" data-duration="1.75" data-track-index="0" style="position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; z-index: 1"></video>
+      <div data-hf-id="hf-kqpp" id="expande" class="clip" data-start="3.40" data-duration="1.15" data-track-index="3" data-track-kind="graphics">
+        <img data-hf-id="hf-7zc9" src="assets/fotos/desayuno.jpg" alt="">
+      </div>
 
-      <div data-hf-id="hf-ufei" id="t-desayuno" class="clip momento" data-start="3.0" data-duration="4.0" data-track-index="2" data-track-kind="graphics">
+      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-58l2" id="v-desayuno-a" class="clip toma" src="assets/clips/desayuno-a.mp4" muted playsinline data-start="4.20" data-duration="2.10" data-track-index="0"></video>
+      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-fq1l" id="v-desayuno-b" class="clip toma" src="assets/clips/desayuno-b.mp4" muted playsinline data-start="6.30" data-duration="2.10" data-track-index="0"></video>
+      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-0kgg" id="v-merienda-a" class="clip toma" src="assets/clips/merienda-a.mp4" muted playsinline data-start="8.40" data-duration="2.10" data-track-index="0"></video>
+      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-238q" id="v-merienda-b" class="clip toma" src="assets/clips/merienda-b.mp4" muted playsinline data-start="10.50" data-duration="2.10" data-track-index="0"></video>
+      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-y4of" id="v-cena-a" class="clip toma" src="assets/clips/cena-a.mp4" muted playsinline data-start="12.60" data-duration="2.10" data-track-index="0"></video>
+      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.1,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-wblo" id="v-cena-b" class="clip toma" src="assets/clips/cena-b.mp4" muted playsinline data-start="14.70" data-duration="2.10" data-track-index="0"></video>
+
+      <div data-hf-id="hf-y809" id="t-desayuno" class="clip momento" data-start="4.20" data-duration="4.20" data-track-index="2" data-track-kind="graphics">
         <div data-hf-id="hf-4kj0" class="velo"></div>
         <div data-hf-id="hf-qz1q" class="hora" id="h-desayuno"><img data-hf-id="hf-y0ik" class="mini-star" src="assets/brand/estrella.png" alt="">08:30</div>
         <div data-hf-id="hf-e6ft" class="palabra"><span data-hf-id="hf-fyxr" id="m1c0" class="ch">d</span><span data-hf-id="hf-hi2v" id="m1c1" class="ch">e</span><span data-hf-id="hf-174g" id="m1c2" class="ch">s</span><span data-hf-id="hf-wtjd" id="m1c3" class="ch">a</span><span data-hf-id="hf-1tys" id="m1c4" class="ch">y</span><span data-hf-id="hf-fn1n" id="m1c5" class="ch">u</span><span data-hf-id="hf-yzcb" id="m1c6" class="ch">n</span><span data-hf-id="hf-thqz" id="m1c7" class="ch">o</span></div>
         <div data-hf-id="hf-bjng" class="paso" id="p-desayuno">comida 1 de 3</div>
       </div>
-      <div data-hf-id="hf-u9u9" id="t-merienda" class="clip momento" data-start="7.0" data-duration="4.0" data-track-index="2" data-track-kind="graphics">
+      <div data-hf-id="hf-eup4" id="t-merienda" class="clip momento" data-start="8.40" data-duration="4.20" data-track-index="2" data-track-kind="graphics">
         <div data-hf-id="hf-rekk" class="velo"></div>
         <div data-hf-id="hf-ryo4" class="hora" id="h-merienda"><img data-hf-id="hf-5mok" class="mini-star" src="assets/brand/estrella.png" alt="">17:00</div>
         <div data-hf-id="hf-xdd9" class="palabra"><span data-hf-id="hf-mv49" id="m2c0" class="ch">m</span><span data-hf-id="hf-pkke" id="m2c1" class="ch">e</span><span data-hf-id="hf-e6ea" id="m2c2" class="ch">r</span><span data-hf-id="hf-2cuk" id="m2c3" class="ch">i</span><span data-hf-id="hf-gtsd" id="m2c4" class="ch">e</span><span data-hf-id="hf-ucf3" id="m2c5" class="ch">n</span><span data-hf-id="hf-v52k" id="m2c6" class="ch">d</span><span data-hf-id="hf-5rjs" id="m2c7" class="ch">a</span></div>
         <div data-hf-id="hf-i01m" class="paso" id="p-merienda">comida 2 de 3</div>
       </div>
-      <div data-hf-id="hf-esc0" id="t-cena" class="clip momento" data-start="11.0" data-duration="1.75" data-track-index="2" data-track-kind="graphics">
+      <div data-hf-id="hf-7t3t" id="t-cena" class="clip momento" data-start="12.60" data-duration="4.20" data-track-index="2" data-track-kind="graphics">
         <div data-hf-id="hf-q7nh" class="velo"></div>
         <div data-hf-id="hf-sdmt" class="hora" id="h-cena"><img data-hf-id="hf-4frh" class="mini-star" src="assets/brand/estrella.png" alt="">21:00</div>
         <div data-hf-id="hf-ykac" class="palabra"><span data-hf-id="hf-f7kk" id="m3c0" class="ch">c</span><span data-hf-id="hf-xpip" id="m3c1" class="ch">e</span><span data-hf-id="hf-49l5" id="m3c2" class="ch">n</span><span data-hf-id="hf-ie27" id="m3c3" class="ch">a</span></div>
         <div data-hf-id="hf-f379" class="paso" id="p-cena">comida 3 de 3</div>
       </div>
 
-      <div data-hf-id="hf-455x" id="cierre" class="clip" data-start="12.75" data-duration="2.38" data-track-index="3" data-track-kind="graphics">
+      <div data-hf-id="hf-w3kv" id="cierre" class="clip fondo" data-start="16.80" data-duration="4.20" data-track-index="1" data-track-kind="graphics">
+        <img data-hf-id="hf-6zr8" id="fondo-b" src="assets/fotos/fondo.jpg" alt="">
         <img data-hf-id="hf-0ujt" id="star-a" src="assets/brand/estrella.png" alt="">
         <img data-hf-id="hf-gyt1" id="logo" src="assets/brand/logo-nido-home-deco-pincipal.png" alt="nido home & deco">
-        <div data-hf-id="hf-pnbf" id="cta1">comentá MESA</div>
+        <div data-hf-id="hf-swfu" id="cta1"><span data-hf-id="hf-nnv0" id="c0" class="ch">c</span><span data-hf-id="hf-c4rf" id="c1" class="ch">o</span><span data-hf-id="hf-wh2w" id="c2" class="ch">m</span><span data-hf-id="hf-rx5n" id="c3" class="ch">e</span><span data-hf-id="hf-l11z" id="c4" class="ch">n</span><span data-hf-id="hf-ooia" id="c5" class="ch">t</span><span data-hf-id="hf-lq9s" id="c6" class="ch">á</span><span data-hf-id="hf-wo48" id="c7" class="ch">&#160;</span><span data-hf-id="hf-wxl2" id="c8" class="ch">M</span><span data-hf-id="hf-nv8h" id="c9" class="ch">E</span><span data-hf-id="hf-64k3" id="c10" class="ch">S</span><span data-hf-id="hf-8wx2" id="c11" class="ch">A</span></div>
         <div data-hf-id="hf-24lq" id="cta2">y armamos la tuya</div>
         <img data-hf-id="hf-7zkq" id="star-b" src="assets/brand/estrella.png" alt="">
       </div>
+
+      <div data-hf-id="hf-pdox" id="cortina1" class="clip cortina" data-start="8.10" data-duration="0.6" data-track-index="4" data-track-kind="graphics"><img data-hf-id="hf-zdu9" src="assets/brand/estrella.png" alt=""></div>
+      <div data-hf-id="hf-4l67" id="cortina2" class="clip cortina" data-start="12.30" data-duration="0.6" data-track-index="4" data-track-kind="graphics"><img data-hf-id="hf-ru4l" src="assets/brand/estrella.png" alt=""></div>
+      <div data-hf-id="hf-5k6c" id="cortina3" class="clip cortina" data-start="16.50" data-duration="0.6" data-track-index="4" data-track-kind="graphics"><img data-hf-id="hf-t11o" src="assets/brand/estrella.png" alt=""></div>
     </div>
 
     <script>
       const tl = gsap.timeline({ paused: true });
 
-      // apertura: las tres fotos ya están en el frame 0 (miniatura); suben suave
-      ["#f1", "#f2", "#f3"].forEach((s, i) => tl.fromTo(s, { y: 40 }, { y: 0, duration: 0.6, ease: "power2.out" }, i * 0.08));
-      tl.fromTo(".pie", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 1.8);
-      tl.to(["#f1", "#f2", "#f3", ".pie", "#titulo"], { opacity: 0, duration: 0.18, ease: "power1.in" }, 2.8);
+      // apertura: la foto de fondo respira, las tres fotos entran con un pop
+      tl.fromTo("#fondo-a", { scale: 1.0 }, { scale: 1.08, duration: 4.20, ease: "none" }, 0);
+      ["#f1", "#f2", "#f3"].forEach((s, i) => tl.fromTo(s, { y: 60, scale: 0.92, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.6)" }, 2.05 + i * 0.14));
+      tl.fromTo(".pie", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 2.5);
 
-      // escritura letra por letra, en los golpes de máquina de escribir de la pista
-      tl.set("#a0", { opacity: 1 }, 0.067);
-      tl.set("#a1", { opacity: 1 }, 0.1);
-      tl.set("#a2", { opacity: 1 }, 0.133);
-      tl.set("#a3", { opacity: 1 }, 0.167);
-      tl.set("#a4", { opacity: 1 }, 0.2);
-      tl.set("#a5", { opacity: 1 }, 0.433);
-      tl.set("#a6", { opacity: 1 }, 0.433);
-      tl.set("#a7", { opacity: 1 }, 0.467);
-      tl.set("#a8", { opacity: 1 }, 0.533);
-      tl.set("#a9", { opacity: 1 }, 0.8);
-      tl.set("#a10", { opacity: 1 }, 0.867);
-      tl.set("#b0", { opacity: 1 }, 0.933);
-      tl.set("#b1", { opacity: 1 }, 0.96);
-      tl.set("#b2", { opacity: 1 }, 1.0);
-      tl.set("#b3", { opacity: 1 }, 1.067);
-      tl.set("#b4", { opacity: 1 }, 1.1);
-      tl.set("#b5", { opacity: 1 }, 1.367);
-      tl.set("#b6", { opacity: 1 }, 1.4);
-      tl.set("#b7", { opacity: 1 }, 1.5);
-      tl.set("#b8", { opacity: 1 }, 1.733);
-      tl.set("#m1c0", { opacity: 1 }, 3.58);
-      tl.set("#m1c1", { opacity: 1 }, 3.666);
-      tl.set("#m1c2", { opacity: 1 }, 3.751);
-      tl.set("#m1c3", { opacity: 1 }, 3.837);
-      tl.set("#m1c4", { opacity: 1 }, 3.923);
-      tl.set("#m1c5", { opacity: 1 }, 4.009);
-      tl.set("#m1c6", { opacity: 1 }, 4.094);
-      tl.set("#m1c7", { opacity: 1 }, 4.18);
-      tl.set("#m2c0", { opacity: 1 }, 7.47);
-      tl.set("#m2c1", { opacity: 1 }, 7.547);
-      tl.set("#m2c2", { opacity: 1 }, 7.624);
-      tl.set("#m2c3", { opacity: 1 }, 7.701);
-      tl.set("#m2c4", { opacity: 1 }, 7.779);
-      tl.set("#m2c5", { opacity: 1 }, 7.856);
-      tl.set("#m2c6", { opacity: 1 }, 7.933);
-      tl.set("#m2c7", { opacity: 1 }, 8.01);
-      tl.set("#m3c0", { opacity: 1 }, 11.68);
-      tl.set("#m3c1", { opacity: 1 }, 11.86);
-      tl.set("#m3c2", { opacity: 1 }, 12.04);
-      tl.set("#m3c3", { opacity: 1 }, 12.22);
+      // la foto del desayuno se expande y de ahí arranca el video
+      tl.set("#expande", { x: -336, y: 20, scale: 0.29259, borderRadius: 82 }, 3.4);
+      tl.set("#f1", { opacity: 0 }, 3.4);
+      tl.to(["#f2", "#f3", "#pie2", "#pie3"], { y: 80, opacity: 0, duration: 0.3, ease: "power2.in", stagger: 0.04 }, 3.4);
+      tl.to(["#titulo", "#pie1"], { opacity: 0, duration: 0.25, ease: "power1.in" }, 3.45);
+      tl.to("#expande", { x: 0, y: 0, scale: 1, borderRadius: 0, duration: 0.7, ease: "power3.inOut" }, 3.45);
+      tl.to("#expande", { opacity: 0, duration: 0.3, ease: "power1.inOut" }, 4.20);
 
-      // momentos: hora y paso aparecen con el corte; el texto se va justo antes del siguiente
-      [["desayuno", 3.0, 7.0], ["merienda", 7.0, 11.0], ["cena", 11.0, 12.75]].forEach(([c, s, e]) => {
-        tl.fromTo("#h-" + c, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, s + 0.1);
-        tl.fromTo("#p-" + c, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, s + 0.3);
-        tl.fromTo("#v-" + c, { scale: 1 }, { scale: 1.05, duration: e - s, ease: "none" }, s);
-      });
+      // escritura letra por letra (cada letra tiene su golpe de tecla en la pista de efectos)
+      tl.set("#a0", { opacity: 1 }, 0.35);
+      tl.set("#a1", { opacity: 1 }, 0.425);
+      tl.set("#a2", { opacity: 1 }, 0.5);
+      tl.set("#a3", { opacity: 1 }, 0.575);
+      tl.set("#a4", { opacity: 1 }, 0.65);
+      tl.set("#a5", { opacity: 1 }, 0.725);
+      tl.set("#a6", { opacity: 1 }, 0.77);
+      tl.set("#a7", { opacity: 1 }, 0.845);
+      tl.set("#a8", { opacity: 1 }, 0.92);
+      tl.set("#a9", { opacity: 1 }, 0.995);
+      tl.set("#a10", { opacity: 1 }, 1.07);
+      tl.set("#b0", { opacity: 1 }, 1.37);
+      tl.set("#b1", { opacity: 1 }, 1.445);
+      tl.set("#b2", { opacity: 1 }, 1.49);
+      tl.set("#b3", { opacity: 1 }, 1.565);
+      tl.set("#b4", { opacity: 1 }, 1.64);
+      tl.set("#b5", { opacity: 1 }, 1.715);
+      tl.set("#b6", { opacity: 1 }, 1.79);
+      tl.set("#b7", { opacity: 1 }, 1.865);
+      tl.set("#b8", { opacity: 1 }, 1.94);
+      tl.set("#c0", { opacity: 1 }, 17.4);
+      tl.set("#c1", { opacity: 1 }, 17.47);
+      tl.set("#c2", { opacity: 1 }, 17.54);
+      tl.set("#c3", { opacity: 1 }, 17.61);
+      tl.set("#c4", { opacity: 1 }, 17.68);
+      tl.set("#c5", { opacity: 1 }, 17.75);
+      tl.set("#c6", { opacity: 1 }, 17.82);
+      tl.set("#c7", { opacity: 1 }, 17.89);
+      tl.set("#c8", { opacity: 1 }, 17.932);
+      tl.set("#c9", { opacity: 1 }, 18.002);
+      tl.set("#c10", { opacity: 1 }, 18.072);
+      tl.set("#c11", { opacity: 1 }, 18.142);
+      tl.set("#m1c0", { opacity: 1 }, 4.65);
+      tl.set("#m1c1", { opacity: 1 }, 4.73);
+      tl.set("#m1c2", { opacity: 1 }, 4.81);
+      tl.set("#m1c3", { opacity: 1 }, 4.89);
+      tl.set("#m1c4", { opacity: 1 }, 4.97);
+      tl.set("#m1c5", { opacity: 1 }, 5.05);
+      tl.set("#m1c6", { opacity: 1 }, 5.13);
+      tl.set("#m1c7", { opacity: 1 }, 5.21);
+      tl.set("#m2c0", { opacity: 1 }, 8.85);
+      tl.set("#m2c1", { opacity: 1 }, 8.93);
+      tl.set("#m2c2", { opacity: 1 }, 9.01);
+      tl.set("#m2c3", { opacity: 1 }, 9.09);
+      tl.set("#m2c4", { opacity: 1 }, 9.17);
+      tl.set("#m2c5", { opacity: 1 }, 9.25);
+      tl.set("#m2c6", { opacity: 1 }, 9.33);
+      tl.set("#m2c7", { opacity: 1 }, 9.41);
+      tl.set("#m3c0", { opacity: 1 }, 13.05);
+      tl.set("#m3c1", { opacity: 1 }, 13.13);
+      tl.set("#m3c2", { opacity: 1 }, 13.21);
+      tl.set("#m3c3", { opacity: 1 }, 13.29);
+
+      // comidas: hora, paso y movimiento de cámara en cada toma
+      tl.fromTo("#h-desayuno", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 4.30);
+      tl.fromTo("#p-desayuno", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 4.55);
+      tl.fromTo("#v-desayuno-a", { scale: 1.0 }, { scale: 1.07, duration: 2.10, ease: "none" }, 4.20);
+      tl.fromTo("#v-desayuno-b", { scale: 1.12 }, { scale: 1.02, duration: 2.10, ease: "power1.out" }, 6.30);
+      tl.fromTo("#h-merienda", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 8.50);
+      tl.fromTo("#p-merienda", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 8.75);
+      tl.fromTo("#v-merienda-a", { scale: 1.0 }, { scale: 1.07, duration: 2.10, ease: "none" }, 8.40);
+      tl.fromTo("#v-merienda-b", { scale: 1.12 }, { scale: 1.02, duration: 2.10, ease: "power1.out" }, 10.50);
+      tl.fromTo("#h-cena", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 12.70);
+      tl.fromTo("#p-cena", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 12.95);
+      tl.fromTo("#v-cena-a", { scale: 1.0 }, { scale: 1.07, duration: 2.10, ease: "none" }, 12.60);
+      tl.fromTo("#v-cena-b", { scale: 1.12 }, { scale: 1.02, duration: 2.10, ease: "power1.out" }, 14.70);
+
+      // cortinas rosas con la estrella entre comidas
+      tl.fromTo("#cortina1", { x: 1080 }, { x: 0, duration: 0.3, ease: "power3.in" }, 8.10);
+      tl.to("#cortina1", { x: -1080, duration: 0.3, ease: "power3.out" }, 8.40);
+      tl.fromTo("#cortina1 img", { rotation: -90 }, { rotation: 90, duration: 0.6, ease: "none" }, 8.10);
+      tl.fromTo("#cortina2", { x: 1080 }, { x: 0, duration: 0.3, ease: "power3.in" }, 12.30);
+      tl.to("#cortina2", { x: -1080, duration: 0.3, ease: "power3.out" }, 12.60);
+      tl.fromTo("#cortina2 img", { rotation: -90 }, { rotation: 90, duration: 0.6, ease: "none" }, 12.30);
+      tl.fromTo("#cortina3", { x: 1080 }, { x: 0, duration: 0.3, ease: "power3.in" }, 16.50);
+      tl.to("#cortina3", { x: -1080, duration: 0.3, ease: "power3.out" }, 16.80);
+      tl.fromTo("#cortina3 img", { rotation: -90 }, { rotation: 90, duration: 0.6, ease: "none" }, 16.50);
 
       // cierre
-      tl.fromTo("#logo", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 12.78);
-      tl.fromTo("#cta1", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 12.82);
-      tl.fromTo("#cta2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 12.9);
-      tl.fromTo(["#star-a", "#star-b"], { rotation: -40, scale: 0.5, opacity: 0 }, { rotation: 0, scale: 1, opacity: 1, duration: 0.7, ease: "power2.out", stagger: 0.1 }, 12.85);
+      tl.fromTo("#fondo-b", { scale: 1.08 }, { scale: 1.0, duration: 4.20, ease: "none" }, 16.80);
+      tl.fromTo("#logo", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 17.00);
+      tl.fromTo("#cta2", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 18.39);
+      tl.fromTo(["#star-a", "#star-b"], { rotation: -60, scale: 0.4, opacity: 0 }, { rotation: 0, scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.6)", stagger: 0.12 }, 17.10);
 
       window.__timelines["main"] = tl;
     </script>
