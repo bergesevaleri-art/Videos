@@ -1,95 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=1080, height=1920">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
+      @font-face {
+        font-family: "Comfortaa";
+        src: url("assets/fonts/Comfortaa-VariableFont_wght.ttf") format("truetype");
+        font-weight: 100 900;
+      }
+      /* paleta del design system Nido */
       :root {
-        --crema: #f6f0e6;
-        --tinta: #3d3a36;
-        --acento: #5f6b83; /* el gris azulado del plato */
-        --font-body: "Nunito", sans-serif;
-        --font-script: "Playfair Display", serif;
+        --pincipal: #9b4c26;
+        --secundario: #7b745a;
+        --terciario: #e0b7a6;
+        --blanco: #ffffff;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
-      body { font-family: var(--font-body); color: var(--tinta); }
+      body { font-family: "Comfortaa", sans-serif; color: var(--pincipal); }
+      .ch { opacity: 0; }
 
-      .card {
-        position: absolute;
-        background: var(--crema);
-        border-radius: 44px;
-        box-shadow: 0 18px 50px rgba(40, 32, 20, 0.22);
-        text-align: center;
-      }
-      .script { font-family: var(--font-script); font-style: italic; font-weight: 400; color: var(--acento); }
+      /* hook: texto claro directo sobre el fondo oscuro */
+      #hook-scrim { position: absolute; left: 0; top: 0; width: 1080px; height: 1000px;
+        background: linear-gradient(180deg, rgba(40, 22, 12, 0.72) 0%, rgba(40, 22, 12, 0.62) 50%, rgba(40, 22, 12, 0) 100%); }
+      #hook-text { position: absolute; left: 110px; top: 330px; width: 860px; }
+      #hook-l1, #hook-l2 { font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; white-space: nowrap; }
+      #hook-l1 { font-size: 118px; color: var(--blanco); }
+      #hook-l2 { font-size: 118px; color: var(--terciario); }
 
-      /* hook: tapa el texto "mismo plato / 3 momentos" original (y 330–560) */
-      #hook-card { left: 110px; top: 280px; width: 860px; height: 380px; padding-top: 52px; }
-      #hook-l1 { font-size: 104px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
-      #hook-l2 { font-size: 132px; line-height: 1.15; margin-top: 6px; }
-
-      /* etiquetas: tapan "desayunos / meriendas / cenas" originales (y 1440–1505, x 350–760) */
-      .label { left: 250px; top: 1362px; width: 580px; height: 220px; padding-top: 30px; }
-      .label .num { font-size: 34px; font-weight: 700; letter-spacing: 0.18em; color: var(--acento); }
-      .label .word { font-size: 112px; line-height: 1.05; }
+      /* etiquetas: tapan las palabras originales (x 350–760, y 1440–1505) */
+      .card { position: absolute; background: var(--blanco); border: 3px solid var(--terciario); border-radius: 24px; text-align: center; }
+      .label { left: 270px; top: 1388px; width: 540px; height: 176px; padding-top: 26px; }
+      .label .num { font-size: 32px; font-weight: 600; letter-spacing: 0.02em; color: var(--secundario); }
+      .label .word { font-size: 80px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; white-space: nowrap; }
 
       /* cierre */
-      #cta-card { left: 90px; top: 720px; width: 900px; height: 380px; padding-top: 86px; }
-      #cta-l1 { font-size: 64px; font-weight: 700; line-height: 1.15; }
-      #cta-key { font-family: var(--font-body); font-style: normal; font-size: 100px; font-weight: 900; letter-spacing: 0.02em; white-space: nowrap; color: var(--acento); line-height: 1.15; }
-      #cta-l2 { font-size: 60px; font-weight: 600; line-height: 1.25; }
-      #cta-dim { position: absolute; inset: 0; background: rgba(30, 24, 16, 0.35); }
+      #cta-dim { position: absolute; inset: 0; background: rgba(40, 22, 12, 0.35); }
+      #cta-card { left: 110px; top: 640px; width: 860px; height: 520px; padding-top: 52px; }
+      #cta-logo { width: 230px; height: auto; display: block; margin: 0 auto 26px; }
+      #cta-key { font-size: 96px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; white-space: nowrap; }
+      #cta-l2 { font-size: 54px; font-weight: 500; color: var(--secundario); margin-top: 14px; }
+      #cta-star { position: absolute; right: 34px; top: 30px; width: 64px; height: 64px; }
     </style>
   </head>
   <body>
-    <div data-hf-id="hf-ye7c" id="root" data-composition-id="main" data-start="0" data-duration="15.13" data-width="1080" data-height="1920">
-      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.08,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.07,&quot;tint&quot;:0,&quot;vibrance&quot;:0.12,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.12,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-rwrf" id="plato" class="clip" src="assets/plato.mp4" playsinline data-has-audio="true" data-start="0" data-duration="15.13" data-track-index="0" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1"></video>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15.13" data-width="1080" data-height="1920">
+      <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.08,&quot;shadows&quot;:0.06,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.07,&quot;tint&quot;:0,&quot;vibrance&quot;:0.12,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.12,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" id="plato" class="clip" src="assets/plato.mp4" playsinline data-has-audio="true"
+        data-start="0" data-duration="15.13" data-track-index="0"
+        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1"></video>
 
-      <div data-hf-id="hf-wv2y" id="hook" class="clip" data-start="0" data-duration="3.05" data-track-index="1" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 3">
-        <div data-hf-id="hf-0zhg" id="hook-card" class="card">
-          <div data-hf-id="hf-31uf" id="hook-l1" data-var-text="hook-l1">mismo plato,</div>
-          <div data-hf-id="hf-9odp" id="hook-l2" class="script" data-var-text="hook-l2">3 momentos</div>
+      <div id="hook" class="clip" data-start="0" data-duration="2.95" data-track-index="1" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 3">
+        <div id="hook-scrim"></div>
+        <div id="hook-text">
+          <div id="hook-l1"><span id="h1c0" class="ch">m</span><span id="h1c1" class="ch">i</span><span id="h1c2" class="ch">s</span><span id="h1c3" class="ch">m</span><span id="h1c4" class="ch">o</span><span id="h1c5" class="ch">&nbsp;</span><span id="h1c6" class="ch">p</span><span id="h1c7" class="ch">l</span><span id="h1c8" class="ch">a</span><span id="h1c9" class="ch">t</span><span id="h1c10" class="ch">o</span></div>
+          <div id="hook-l2"><span id="h2c0" class="ch">3</span><span id="h2c1" class="ch">&nbsp;</span><span id="h2c2" class="ch">m</span><span id="h2c3" class="ch">o</span><span id="h2c4" class="ch">m</span><span id="h2c5" class="ch">e</span><span id="h2c6" class="ch">n</span><span id="h2c7" class="ch">t</span><span id="h2c8" class="ch">o</span><span id="h2c9" class="ch">s</span></div>
         </div>
       </div>
 
-      <div data-hf-id="hf-lcdw" id="lab1" class="clip" data-start="3.0" data-duration="4.0" data-track-index="1" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 3">
-        <div data-hf-id="hf-v6a3" id="lab1-card" class="card label"><div data-hf-id="hf-snz2" class="num">MOMENTO 1</div><div data-hf-id="hf-990f" class="word script" data-var-text="lab1">desayunos</div></div>
+      <div id="lab1" class="clip" data-start="3.0" data-duration="4.0" data-track-index="1" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 3">
+        <div id="lab1-card" class="card label"><div class="num">momento 1</div><div class="word"><span id="l1c0" class="ch">d</span><span id="l1c1" class="ch">e</span><span id="l1c2" class="ch">s</span><span id="l1c3" class="ch">a</span><span id="l1c4" class="ch">y</span><span id="l1c5" class="ch">u</span><span id="l1c6" class="ch">n</span><span id="l1c7" class="ch">o</span><span id="l1c8" class="ch">s</span></div></div>
       </div>
-      <div data-hf-id="hf-upw5" id="lab2" class="clip" data-start="7.0" data-duration="4.0" data-track-index="1" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 3">
-        <div data-hf-id="hf-911q" id="lab2-card" class="card label"><div data-hf-id="hf-t2a3" class="num">MOMENTO 2</div><div data-hf-id="hf-j3sp" class="word script" data-var-text="lab2">meriendas</div></div>
+      <div id="lab2" class="clip" data-start="7.0" data-duration="4.0" data-track-index="1" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 3">
+        <div id="lab2-card" class="card label"><div class="num">momento 2</div><div class="word"><span id="l2c0" class="ch">m</span><span id="l2c1" class="ch">e</span><span id="l2c2" class="ch">r</span><span id="l2c3" class="ch">i</span><span id="l2c4" class="ch">e</span><span id="l2c5" class="ch">n</span><span id="l2c6" class="ch">d</span><span id="l2c7" class="ch">a</span><span id="l2c8" class="ch">s</span></div></div>
       </div>
-      <div data-hf-id="hf-g9vp" id="lab3" class="clip" data-start="11.0" data-duration="2.15" data-track-index="1" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 3">
-        <div data-hf-id="hf-djap" id="lab3-card" class="card label"><div data-hf-id="hf-tgl4" class="num">MOMENTO 3</div><div data-hf-id="hf-g25w" class="word script" data-var-text="lab3">cenas</div></div>
+      <div id="lab3" class="clip" data-start="11.0" data-duration="2.13" data-track-index="1" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 3">
+        <div id="lab3-card" class="card label"><div class="num">momento 3</div><div class="word"><span id="l3c0" class="ch">c</span><span id="l3c1" class="ch">e</span><span id="l3c2" class="ch">n</span><span id="l3c3" class="ch">a</span><span id="l3c4" class="ch">s</span></div></div>
       </div>
 
-      <div data-hf-id="hf-dibv" id="cta" class="clip" data-start="12.85" data-duration="2.28" data-track-index="2" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 4">
-        <div data-hf-id="hf-byfg" id="cta-dim"></div>
-        <div data-hf-id="hf-vq0d" id="cta-card" class="card">
-          <div data-hf-id="hf-4o0f" id="cta-key" data-var-text="cta-key">comentá MESA</div>
-          <div data-hf-id="hf-0lun" id="cta-l2" data-var-text="cta-l2">y armamos la tuya ✨</div>
+      <div id="cta" class="clip" data-start="12.85" data-duration="2.28" data-track-index="2" data-track-kind="graphics" style="position: absolute; inset: 0; z-index: 4">
+        <div id="cta-dim"></div>
+        <div id="cta-card" class="card">
+          <img id="cta-star" src="assets/brand/estrella.png" alt="" />
+          <img id="cta-logo" src="assets/brand/logo-nido-home-deco-pincipal.png" alt="nido home &amp; deco" />
+          <div id="cta-key">comentá MESA</div>
+          <div id="cta-l2">y armamos la tuya</div>
         </div>
       </div>
     </div>
 
     <script>
       const tl = gsap.timeline({ paused: true });
-      // hook: completo desde el frame 0 (miniatura)
-      tl.fromTo("#hook-l2", { scale: 0.94 }, { scale: 1, duration: 0.6, ease: "power3.out" }, 0);
-      tl.to("#hook-card", { scale: 0.96, opacity: 0, duration: 0.2, ease: "power2.in" }, 2.8);
 
-      // etiquetas: aparecen con pop suave y se van justo antes del corte
+      // apertura: acercamiento desde abajo (deja fuera de cuadro el texto que venía quemado arriba)
+      tl.set("#plato", { transformOrigin: "50% 100%", scale: 1.42 }, 0);
+      tl.set("#plato", { scale: 1 }, 2.95);
+
+      // escritura letra por letra, sincronizada con los golpes de la máquina de escribir del audio
+      tl.set("#h1c0", { opacity: 1 }, 0.067);
+      tl.set("#h1c1", { opacity: 1 }, 0.1);
+      tl.set("#h1c2", { opacity: 1 }, 0.133);
+      tl.set("#h1c3", { opacity: 1 }, 0.167);
+      tl.set("#h1c4", { opacity: 1 }, 0.2);
+      tl.set("#h1c5", { opacity: 1 }, 0.433);
+      tl.set("#h1c6", { opacity: 1 }, 0.433);
+      tl.set("#h1c7", { opacity: 1 }, 0.467);
+      tl.set("#h1c8", { opacity: 1 }, 0.533);
+      tl.set("#h1c9", { opacity: 1 }, 0.8);
+      tl.set("#h1c10", { opacity: 1 }, 0.867);
+      tl.set("#h2c0", { opacity: 1 }, 0.933);
+      tl.set("#h2c1", { opacity: 1 }, 0.96);
+      tl.set("#h2c2", { opacity: 1 }, 1.0);
+      tl.set("#h2c3", { opacity: 1 }, 1.067);
+      tl.set("#h2c4", { opacity: 1 }, 1.1);
+      tl.set("#h2c5", { opacity: 1 }, 1.367);
+      tl.set("#h2c6", { opacity: 1 }, 1.4);
+      tl.set("#h2c7", { opacity: 1 }, 1.467);
+      tl.set("#h2c8", { opacity: 1 }, 1.5);
+      tl.set("#h2c9", { opacity: 1 }, 1.733);
+      tl.set("#l1c0", { opacity: 1 }, 3.58);
+      tl.set("#l1c1", { opacity: 1 }, 3.655);
+      tl.set("#l1c2", { opacity: 1 }, 3.73);
+      tl.set("#l1c3", { opacity: 1 }, 3.805);
+      tl.set("#l1c4", { opacity: 1 }, 3.88);
+      tl.set("#l1c5", { opacity: 1 }, 3.955);
+      tl.set("#l1c6", { opacity: 1 }, 4.03);
+      tl.set("#l1c7", { opacity: 1 }, 4.105);
+      tl.set("#l1c8", { opacity: 1 }, 4.18);
+      tl.set("#l2c0", { opacity: 1 }, 7.47);
+      tl.set("#l2c1", { opacity: 1 }, 7.537);
+      tl.set("#l2c2", { opacity: 1 }, 7.605);
+      tl.set("#l2c3", { opacity: 1 }, 7.672);
+      tl.set("#l2c4", { opacity: 1 }, 7.74);
+      tl.set("#l2c5", { opacity: 1 }, 7.808);
+      tl.set("#l2c6", { opacity: 1 }, 7.875);
+      tl.set("#l2c7", { opacity: 1 }, 7.942);
+      tl.set("#l2c8", { opacity: 1 }, 8.01);
+      tl.set("#l3c0", { opacity: 1 }, 11.68);
+      tl.set("#l3c1", { opacity: 1 }, 11.815);
+      tl.set("#l3c2", { opacity: 1 }, 11.95);
+      tl.set("#l3c3", { opacity: 1 }, 12.085);
+      tl.set("#l3c4", { opacity: 1 }, 12.22);
+
+      // etiquetas: entrada suave, salida justo antes del corte
       [["#lab1-card", 3.0, 7.0], ["#lab2-card", 7.0, 11.0], ["#lab3-card", 11.0, 13.13]].forEach(([sel, s, e]) => {
-        tl.fromTo(sel, { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.8)" }, s);
-        tl.fromTo(sel + " .word", { y: 18 }, { y: 0, duration: 0.4, ease: "power3.out" }, s + 0.05);
-        tl.to(sel, { opacity: 0, scale: 0.95, duration: 0.12, ease: "power2.in" }, e - 0.13);
+        tl.fromTo(sel, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, s);
+        tl.to(sel, { opacity: 0, duration: 0.12, ease: "power2.in" }, e - 0.13);
       });
 
       // cierre
       tl.fromTo("#cta-dim", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 12.85);
-      tl.fromTo("#cta-card", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 12.9);
-      tl.fromTo("#cta-key", { scale: 0.8 }, { scale: 1, duration: 0.5, ease: "back.out(2)" }, 13.05);
+      tl.fromTo("#cta-card", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 12.9);
+      tl.fromTo("#cta-star", { rotation: -30, scale: 0.6 }, { rotation: 0, scale: 1, duration: 0.6, ease: "power2.out" }, 13.1);
 
       window.__timelines["main"] = tl;
     </script>
