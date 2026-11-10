@@ -15,7 +15,14 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent
 SR = 44100
-DUR = 15.13            # largo de la pista del primer video
+# La pista del primer video dura 15.13 s; para que la cena dure más se repite un tramo de la
+# merienda (sin golpes de máquina) justo después de que se escribe "cena". El tramo y el punto
+# de empalme se eligieron midiendo dónde el espectro de la música coincide mejor.
+EMPALME = 12.45                         # dónde se inserta
+TRAMO = (8.26, 10.40)                   # qué se repite (2.14 s)
+EXTRA = TRAMO[1] - TRAMO[0]
+DUR = round(15.13 + EXTRA - 0.08, 2)       # los dos fundidos cruzados restan 0.08 s
+PUSH = 0.3                              # transición: el video nuevo empuja al anterior
 
 # ---------------------------------------------------------------- grilla (atada a la pista original)
 # La pista trae música + golpes de máquina de escribir; cada texto se escribe sobre su tanda de golpes.
@@ -23,9 +30,9 @@ HOOK_END = 3.0
 MOMENTOS = [                            # (palabra, hora, inicio, largo, tanda de golpes)
     ("desayuno", "08:30", 3.0, 4.0, (3.58, 4.18)),
     ("merienda", "17:00", 7.0, 4.0, (7.47, 8.01)),
-    ("cena", "21:00", 11.0, 1.8, (11.68, 12.22)),
+    ("cena", "21:00", 11.0, round(1.8 + EXTRA, 2), (11.68, 12.22)),
 ]
-CIERRE = 12.8
+CIERRE = round(12.8 + EXTRA, 2)
 
 
 def even(text, a, b):
@@ -73,13 +80,27 @@ for i in range(3):
 place(sfx, load("whoosh.mp3"), 2.3, 0.8)                  # la foto del desayuno se expande
 wsh = load("whoosh-short.mp3")
 for b in (MOMENTOS[1][2], MOMENTOS[2][2], CIERRE):
-    place(sfx, wsh, b - 0.32, 0.7)                           # cortina rosa
+    place(sfx, wsh, b - PUSH - 0.05, 0.7)                    # transición entre videos
 place(sfx, load("sparkle.mp3"), CIERRE + 0.2, 0.55)          # logo
 write_m4a(sfx, "sfx.m4a")
 
-# música: la pista del primer video, tal cual
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(ROOT.parent / "mismo-plato/assets/plato.mp4"), "-vn",
-                "-c:a", "copy", str(ROOT / "assets/audio/musica.m4a")], check=True)
+# música: la pista del primer video, con el tramo repetido para alargar la cena
+raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(ROOT.parent / "mismo-plato/assets/plato.mp4"), "-vn",
+                      "-ac", "2", "-ar", str(SR), "-f", "f32le", "-"], check=True, capture_output=True).stdout
+pista = np.frombuffer(raw, dtype=np.float32).reshape(-1, 2)
+xf = int(0.04 * SR)
+ramp = np.linspace(0, 1, xf)[:, None]
+
+
+def splice(a, b):
+    """Une a y b con un fundido cruzado corto para que no haga clic."""
+    return np.concatenate([a[:-xf], a[-xf:] * (1 - ramp) + b[:xf] * ramp, b[xf:]])
+
+
+p0, t0, t1_ = int(EMPALME * SR), int(TRAMO[0] * SR), int(TRAMO[1] * SR)
+musica = splice(splice(pista[:p0 + xf], pista[t0:t1_ + xf]), pista[p0 + xf:])
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-", "-c:a", "aac", "-b:a", "192k",
+                str(ROOT / "assets/audio/musica.m4a")], input=musica.astype(np.float32).tobytes(), check=True)
 
 # ---------------------------------------------------------------- html
 
@@ -91,13 +112,14 @@ def spans(text, prefix):
 
 sets = [(f"#a{i}", t) for i, t in enumerate(t1)] + [(f"#b{i}", t) for i, t in enumerate(t2)]
 sets += [(f"#c{i}", t) for i, t in enumerate(cta_times)]
-videos, textos, cortinas = "", "", ""
+videos, textos = "", ""
 moment_js = []
 for k, ((word, hora, s, L, _), mt) in enumerate(zip(MOMENTOS, mom_times), 1):
     sets += [(f"#m{k}c{i}", t) for i, t in enumerate(mt)]
     for part, off in (("a", 0.0), ("b", L / 2)):
+        pre = PUSH if (part == "a" and k > 1) else 0.0      # entra antes para empujar al anterior
         videos += f'''
-      <video id="v-{word}-{part}" class="clip toma" src="assets/clips/{word}-{part}.mp4" muted playsinline data-start="{s + off:.2f}" data-duration="{L / 2:.2f}" data-track-index="0"></video>'''
+      <video id="v-{word}-{part}" class="clip toma" src="assets/clips/{word}-{part}.mp4" muted playsinline data-start="{s + off - pre:.2f}" data-duration="{L / 2 + pre:.2f}" data-track-index="0"></video>'''
     textos += f'''
       <div id="t-{word}" class="clip momento" data-start="{s:.2f}" data-duration="{L:.2f}" data-track-index="2" data-track-kind="graphics">
         <div class="velo"></div>
@@ -106,9 +128,6 @@ for k, ((word, hora, s, L, _), mt) in enumerate(zip(MOMENTOS, mom_times), 1):
         <div class="paso" id="p-{word}">comida {k} de 3</div>
       </div>'''
     moment_js.append((word, s, L))
-for i, b in enumerate([MOMENTOS[1][2], MOMENTOS[2][2], CIERRE], 1):
-    cortinas += f'''
-      <div id="cortina{i}" class="clip cortina" data-start="{b - 0.3:.2f}" data-duration="0.6" data-track-index="4" data-track-kind="graphics"><img src="assets/brand/estrella.png" alt="" /></div>'''
 
 set_js = "\n".join(f'      tl.set("{a}", {{ opacity: 1 }}, {t});' for a, t in sets)
 mom_js = "\n".join(
@@ -117,11 +136,14 @@ mom_js = "\n".join(
       tl.fromTo("#v-{w}-a", {{ scale: 1.0 }}, {{ scale: 1.07, duration: {L / 2:.2f}, ease: "none" }}, {s:.2f});
       tl.fromTo("#v-{w}-b", {{ scale: 1.12 }}, {{ scale: 1.02, duration: {L / 2:.2f}, ease: "power1.out" }}, {s + L / 2:.2f});'''
     for w, s, L in moment_js)
+# transición entre videos: el nuevo entra desde la derecha y empuja al anterior (video + textos)
+pushes = [(MOMENTOS[1][2], ["#v-desayuno-b", "#t-desayuno"], ["#v-merienda-a"]),
+          (MOMENTOS[2][2], ["#v-merienda-b", "#t-merienda"], ["#v-cena-a"]),
+          (CIERRE, ["#v-cena-b", "#t-cena"], ["#cierre"])]
 cort_js = "\n".join(
-    f'''      tl.fromTo("#cortina{i} ", {{ x: 1080 }}, {{ x: 0, duration: 0.3, ease: "power3.in" }}, {b - 0.3:.2f});
-      tl.to("#cortina{i}", {{ x: -1080, duration: 0.3, ease: "power3.out" }}, {b:.2f});
-      tl.fromTo("#cortina{i} img", {{ rotation: -90 }}, {{ rotation: 90, duration: 0.6, ease: "none" }}, {b - 0.3:.2f});'''
-    for i, b in enumerate([MOMENTOS[1][2], MOMENTOS[2][2], CIERRE], 1)).replace('"#cortina1 "', '"#cortina1"').replace('"#cortina2 "', '"#cortina2"').replace('"#cortina3 "', '"#cortina3"')
+    f'''      tl.to({json.dumps(out)}, {{ x: -1080, duration: {PUSH}, ease: "power3.inOut" }}, {b - PUSH:.2f});
+      tl.fromTo({json.dumps(inc)}, {{ x: 1080 }}, {{ x: 0, duration: {PUSH}, ease: "power3.inOut" }}, {b - PUSH:.2f});'''
+    for b, out, inc in pushes)
 
 # tile del desayuno: 316x560 en (46, 700) → pantalla completa
 TILE_SCALE = 316 / 1080
@@ -165,8 +187,6 @@ doc = f'''<!doctype html>
       .palabra {{ position: absolute; left: 0; top: 312px; width: 1080px; text-align: center; font-size: 104px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }}
       .paso {{ position: absolute; left: 0; top: 446px; width: 1080px; text-align: center; font-size: 38px; font-weight: 600; }}
 
-      .cortina {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: var(--terciario); z-index: 8; }}
-      .cortina img {{ position: absolute; left: 470px; top: 890px; width: 140px; height: 140px; }}
 
       #cierre {{ z-index: 5; }}
       #logo {{ position: absolute; left: 370px; top: 560px; width: 340px; height: auto; }}
@@ -201,7 +221,7 @@ doc = f'''<!doctype html>
 {videos}
 {textos}
 
-      <div id="cierre" class="clip fondo" data-start="{CIERRE:.2f}" data-duration="{DUR - CIERRE:.2f}" data-track-index="1" data-track-kind="graphics">
+      <div id="cierre" class="clip fondo" data-start="{CIERRE - PUSH:.2f}" data-duration="{DUR - CIERRE + PUSH:.2f}" data-track-index="1" data-track-kind="graphics">
         <img id="fondo-b" src="assets/fotos/fondo.jpg" alt="" />
         <img id="star-a" src="assets/brand/estrella.png" alt="" />
         <img id="logo" src="assets/brand/logo-nido-home-deco-pincipal.png" alt="nido home &amp; deco" />
@@ -209,7 +229,6 @@ doc = f'''<!doctype html>
         <div id="cta2">y armamos la tuya</div>
         <img id="star-b" src="assets/brand/estrella.png" alt="" />
       </div>
-{cortinas}
     </div>
 
     <script>
@@ -234,7 +253,7 @@ doc = f'''<!doctype html>
       // comidas: hora, paso y movimiento de cámara en cada toma
 {mom_js}
 
-      // cortinas rosas con la estrella entre comidas
+      // transiciones con movimiento entre videos
 {cort_js}
 
       // cierre
