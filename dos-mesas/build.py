@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reel "¿team mesa 1 o team mesa 2?": genera index.html, la música (120 bpm) y los efectos.
+"""Reel "lo simple en gris es superior": genera index.html, la música (120 bpm) y los efectos.
 
 Todo sale de una grilla de 120 bpm (un tiempo = 0.5 s): los cortes caen en el pulso, cada letra
 escrita tiene su golpe de tecla y las transiciones su whoosh.
@@ -16,17 +16,20 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent
 SR = 44100
 BEAT = 0.5
-DUR = 19.0
+DUR = 19.5
 PUSH = 0.3
 
 # ---------------------------------------------------------------- grilla
-HOOK = [("f1", 0.0), ("f2", 0.5), ("f3", 1.0), ("f4", 1.5)]          # cortes flash de 0.5 s
+HOOK = [("f1", 0.0), ("f2", 0.5), ("f3", 1.0), ("f4", 1.5), ("f5", 2.0)]   # cortes flash de 0.5 s
 MESAS = [
-    # número, nombre, inicio, tomas (clip, duración)
-    ("1", "mesa neutra", 2.0, [("m1a", 1.0), ("m1b", 1.5), ("m1c", 1.0), ("m1d", 1.5), ("m1e", 1.0)]),
-    ("2", "mesa cuadrillé", 8.0, [("m2a", 1.5), ("m2b", 1.0), ("m2c", 1.5), ("m2d", 1.0), ("m2e", 1.0)]),
+    # título, inicio, tomas (clip, duración), una palabra por corte
+    ("gris + natural", 2.5, [("m1a", 1.0), ("m1b", 1.5), ("m1c", 1.0), ("m1d", 1.5), ("m1e", 1.0)],
+     ["simple", "cálido", "atemporal", "combina con todo", "nunca aburre"]),
+    ("gris + cuadrillé", 8.5, [("m2a", 1.5), ("m2b", 1.0), ("m2c", 1.5), ("m2d", 1.0), ("m2e", 1.0)],
+     ["fresco", "prolijo", "para todos los días", "con onda", "siempre elegante"]),
 ]
-SPLIT, SPLIT_END = 14.0, 16.4
+START = MESAS[0][1]
+SPLIT, SPLIT_END = 14.5, 16.9
 CIERRE = SPLIT_END
 
 
@@ -38,13 +41,14 @@ def typed(text, start, step):
     return out
 
 
-H1, H2 = "¿team mesa 1", "o team mesa 2?"
-th1 = typed(H1, 0.08, 0.05)
-th2 = typed(H2, th1[-1] + 0.1, 0.05)
-names_t = [typed(n, s + 0.2, 0.06) for _, n, s, _ in MESAS]
-Q = "¿cuál elegís?"
-tq = typed(Q, SPLIT + 0.35, 0.06)
-CTA1, CTA2 = "comentá 1 o 2", "y armamos la tuya"
+H1, H2 = "el gris tiene mala fama..", "y no se la merece"
+th1 = typed(H1, 0.06, 0.042)
+th2 = typed(H2, th1[-1] + 0.1, 0.042)
+names_t = [typed(n, s + 0.15, 0.055) for n, s, _, _ in MESAS]
+Q1, Q2 = "lo simple en gris", "es superior"
+tq1 = typed(Q1, SPLIT + 0.2, 0.05)
+tq2 = typed(Q2, tq1[-1] + 0.12, 0.05)
+CTA1, CTA2 = "comentá GRIS", "y armamos la tuya"
 tc = typed(CTA1, CIERRE + 0.55, 0.055)
 
 # ---------------------------------------------------------------- audio
@@ -79,22 +83,20 @@ def write_m4a(buf, name, rms_db=None, peak=0.89):
 # efectos
 sfx = np.zeros((int(DUR * SR), 2), dtype=np.float32)
 key, pop, wsh, clk = load("key-press.mp3"), load("pop.mp3"), load("whoosh-short.mp3"), load("click-soft.mp3")
-for text, times in [(H1, th1), (H2, th2), (Q, tq), (CTA1, tc)] + [(n, t) for (_, n, _, _), t in zip(MESAS, names_t)]:
+for text, times in [(H1, th1), (H2, th2), (Q1, tq1), (Q2, tq2), (CTA1, tc)] + [(n, t) for (n, _, _, _), t in zip(MESAS, names_t)]:
     for ch, t in zip(text, times):
         if ch != " ":
             place(sfx, key, t, 0.5 * rng.uniform(0.8, 1.0))
 for _, t in HOOK[1:]:
     place(sfx, clk, t, 0.5)
-for _, _, s, shots in MESAS:
+for _, s, shots, _ in MESAS:
     place(sfx, pop, s, 0.6)
     t = s
     for _, d in shots[:-1]:
         t += d
         place(sfx, clk, t, 0.35)
-for b in (MESAS[1][2], SPLIT, CIERRE):
+for b in (MESAS[1][1], SPLIT, CIERRE):
     place(sfx, wsh, b - PUSH - 0.05, 0.8)
-place(sfx, pop, SPLIT + 0.1, 0.5)
-place(sfx, pop, SPLIT + 0.22, 0.5)
 place(sfx, load("sparkle.mp3"), CIERRE + 0.2, 0.6)
 write_m4a(sfx, "sfx.m4a")
 
@@ -158,7 +160,7 @@ for b in range(n_beats):
     ch, bass = CH[bar % 4], BASS[bar % 4]
     split = SPLIT <= t < SPLIT_END
     outro = t >= CIERRE + 1.0
-    if t >= 2.0 and not split and not outro:
+    if t >= START and not split and not outro:
         put(K, t, g=0.9)                                      # bombo en cada tiempo
         tt = np.arange(int(BEAT * SR)) / SR
         bs = (np.sin(2 * np.pi * hz(bass) * tt) + 0.5 * np.sin(4 * np.pi * hz(bass) * tt)) * np.exp(-tt / 0.3) * 0.45
@@ -167,7 +169,7 @@ for b in range(n_beats):
         put(C, t, g=0.8 if not split else 0.5)               # palmas en 2 y 4
     if not outro:
         put(H, t + BEAT / 2, pan=0.2)
-        if t >= 2.0:
+        if t >= START:
             put(H * 0.6, t + BEAT / 4, pan=-0.2)
             put(H * 0.6, t + 3 * BEAT / 4, pan=-0.2)
     # pluck en corcheas con la escala del acorde
@@ -198,7 +200,7 @@ def spans(text, p):
 
 
 sets = [(f"#a{i}", t) for i, t in enumerate(th1)] + [(f"#b{i}", t) for i, t in enumerate(th2)]
-sets += [(f"#q{i}", t) for i, t in enumerate(tq)] + [(f"#c{i}", t) for i, t in enumerate(tc)]
+sets += [(f"#q{i}", t) for i, t in enumerate(tq1)] + [(f"#r{i}", t) for i, t in enumerate(tq2)] + [(f"#c{i}", t) for i, t in enumerate(tc)]
 
 videos, textos, js = "", "", []
 for clip, t in HOOK:
@@ -208,10 +210,16 @@ for clip, t in HOOK:
     js.append(f'tl.set("#flash", {{ opacity: 0.55 }}, {t:.2f});')
     js.append(f'tl.to("#flash", {{ opacity: 0, duration: 0.14, ease: "power1.out" }}, {t:.2f});')
 
-for k, ((num, name, s, shots), nt) in enumerate(zip(MESAS, names_t), 1):
+for k, ((name, s, shots, words), nt) in enumerate(zip(MESAS, names_t), 1):
     sets += [(f"#n{k}c{i}", t) for i, t in enumerate(nt)]
     t = s
-    for j, (clip, d) in enumerate(shots):
+    cortes = ""
+    for j, ((clip, d), w) in enumerate(zip(shots, words)):
+        cortes += f'<div class="corte" id="w{k}-{j}">{html.escape(w)}</div>'
+        js.append(f'tl.set("#w{k}-{j}", {{ opacity: 1 }}, {t + 0.05:.2f});')
+        js.append(f'tl.fromTo("#w{k}-{j}", {{ scale: 0.6 }}, {{ scale: 1, duration: 0.3, ease: "back.out(2.4)" }}, {t + 0.05:.2f});')
+        if j < len(shots) - 1:
+            js.append(f'tl.set("#w{k}-{j}", {{ opacity: 0 }}, {t + d:.2f});')
         pre = PUSH if (j == 0 and k > 1) else 0.0
         videos += f'''
       <video id="v-{clip}" class="clip toma" src="assets/clips/{clip}.mp4" muted playsinline data-start="{t - pre:.2f}" data-duration="{d + pre:.2f}" data-track-index="0"></video>'''
@@ -223,16 +231,14 @@ for k, ((num, name, s, shots), nt) in enumerate(zip(MESAS, names_t), 1):
     textos += f'''
       <div id="t-mesa{k}" class="clip momento" data-start="{s:.2f}" data-duration="{L:.2f}" data-track-index="2" data-track-kind="graphics">
         <div class="velo"></div>
-        <div class="numero" id="num{k}">{num}</div>
         <div class="nombre">{spans(name, f"n{k}c")}</div>
+        {cortes}
       </div>'''
-    js.append(f'tl.fromTo("#num{k}", {{ scale: 0.3, opacity: 0, rotation: -12 }}, {{ scale: 1, opacity: 1, rotation: 0, duration: 0.45, ease: "back.out(2.2)" }}, {s:.2f});')
-    js.append(f'tl.to("#num{k}", {{ scale: 1.08, duration: 0.12, yoyo: true, repeat: 1, ease: "power1.inOut" }}, {s + 2.0:.2f});')
 
 # transición mesa 1 → mesa 2: el video nuevo empuja al anterior
-js.append(f'tl.to(["#v-m1e", "#t-mesa1"], {{ x: -1080, duration: {PUSH}, ease: "power3.inOut" }}, {MESAS[1][2] - PUSH:.2f});')
-js.append(f'tl.fromTo("#v-m2a", {{ x: 1080 }}, {{ x: 0, duration: {PUSH}, ease: "power3.inOut" }}, {MESAS[1][2] - PUSH:.2f});')
-js.append(f'tl.set("#t-mesa2", {{ x: 0 }}, {MESAS[1][2]:.2f});')
+js.append(f'tl.to(["#v-m1e", "#t-mesa1"], {{ x: -1080, duration: {PUSH}, ease: "power3.inOut" }}, {MESAS[1][1] - PUSH:.2f});')
+js.append(f'tl.fromTo("#v-m2a", {{ x: 1080 }}, {{ x: 0, duration: {PUSH}, ease: "power3.inOut" }}, {MESAS[1][1] - PUSH:.2f});')
+js.append(f'tl.set("#t-mesa2", {{ x: 0 }}, {MESAS[1][1]:.2f});')
 
 set_js = "\n".join(f'      tl.set("{a}", {{ opacity: 1 }}, {t});' for a, t in sets)
 all_js = "\n".join("      " + x for x in js)
@@ -257,17 +263,16 @@ doc = f'''<!doctype html>
 
       #flash {{ position: absolute; inset: 0; background: var(--blanco); opacity: 0; z-index: 4; }}
       #gancho {{ position: absolute; inset: 0; z-index: 3; }}
-      #gancho-texto {{ position: absolute; left: 0; top: 250px; width: 1080px; text-align: center; font-size: 92px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; }}
+      #gancho-texto {{ position: absolute; left: 0; top: 250px; width: 1080px; text-align: center; font-size: 76px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; }}
 
       .momento {{ position: absolute; inset: 0; z-index: 3; }}
-      .numero {{ position: absolute; left: 0; top: 170px; width: 1080px; text-align: center; font-size: 210px; font-weight: 700; line-height: 1; }}
-      .nombre {{ position: absolute; left: 0; top: 400px; width: 1080px; text-align: center; font-size: 62px; font-weight: 700; letter-spacing: -0.01em; }}
+      .nombre {{ position: absolute; left: 0; top: 230px; width: 1080px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: -0.02em; }}
+      .corte {{ position: absolute; left: 0; top: 370px; width: 1080px; text-align: center; font-size: 60px; font-weight: 600; opacity: 0; color: var(--secundario); }}
 
       #comparar {{ position: absolute; inset: 0; z-index: 6; }}
       .mitad {{ position: absolute; top: 0; width: 537px; height: 1920px; object-fit: cover; z-index: 5; }}
       #v-s1 {{ left: 0; }} #v-s2 {{ left: 543px; }}
-      .num-mitad {{ position: absolute; top: 190px; width: 537px; text-align: center; font-size: 170px; font-weight: 700; line-height: 1; }}
-      #pregunta {{ position: absolute; left: 0; top: 400px; width: 1080px; text-align: center; font-size: 84px; font-weight: 700; letter-spacing: -0.02em; }}
+      #pregunta {{ position: absolute; left: 0; top: 240px; width: 1080px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; }}
 
       #cierre {{ position: absolute; inset: 0; z-index: 6; background: var(--blanco); overflow: hidden; }}
       #fondo {{ position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; opacity: 0.28; }}
@@ -284,20 +289,18 @@ doc = f'''<!doctype html>
       <audio id="efectos" class="clip" src="assets/audio/sfx.m4a" data-start="0" data-duration="{DUR:.2f}" data-track-index="11" data-volume="0.8"></audio>
 {videos}
 
-      <div id="gancho" class="clip" data-start="0" data-duration="2.0" data-track-index="2" data-track-kind="graphics">
+      <div id="gancho" class="clip" data-start="0" data-duration="{START:.2f}" data-track-index="2" data-track-kind="graphics">
         <div class="velo"></div>
         <div id="gancho-texto"><div>{spans(H1, "a")}</div><div>{spans(H2, "b")}</div></div>
       </div>
-      <div id="flash" class="clip" data-start="0" data-duration="2.0" data-track-index="4" data-track-kind="graphics"></div>
+      <div id="flash" class="clip" data-start="0" data-duration="{START:.2f}" data-track-index="4" data-track-kind="graphics"></div>
 {textos}
 
       <video id="v-s1" class="clip mitad" src="assets/clips/s1.mp4" muted playsinline data-start="{SPLIT - PUSH:.2f}" data-duration="{SPLIT_END - SPLIT + PUSH:.2f}" data-track-index="0"></video>
       <video id="v-s2" class="clip mitad" src="assets/clips/s2.mp4" muted playsinline data-start="{SPLIT - PUSH:.2f}" data-duration="{SPLIT_END - SPLIT + PUSH:.2f}" data-track-index="0"></video>
       <div id="comparar" class="clip" data-start="{SPLIT - PUSH:.2f}" data-duration="{SPLIT_END - SPLIT + PUSH:.2f}" data-track-index="3" data-track-kind="graphics">
         <div class="velo"></div>
-        <div id="num-izq" class="num-mitad" style="left: 0">1</div>
-        <div id="num-der" class="num-mitad" style="left: 543px">2</div>
-        <div id="pregunta">{spans(Q, "q")}</div>
+        <div id="pregunta"><div>{spans(Q1, "q")}</div><div>{spans(Q2, "r")}</div></div>
       </div>
 
       <div id="cierre" class="clip" data-start="{CIERRE - PUSH:.2f}" data-duration="{DUR - CIERRE + PUSH:.2f}" data-track-index="5" data-track-kind="graphics">
@@ -322,8 +325,6 @@ doc = f'''<!doctype html>
       // comparación: las dos mitades entran desde arriba y desde abajo
       tl.fromTo("#v-s1", {{ y: -1920 }}, {{ y: 0, duration: {PUSH + 0.1}, ease: "power3.out" }}, {SPLIT - PUSH:.2f});
       tl.fromTo("#v-s2", {{ y: 1920 }}, {{ y: 0, duration: {PUSH + 0.1}, ease: "power3.out" }}, {SPLIT - PUSH:.2f});
-      tl.fromTo("#num-izq", {{ scale: 0.3, opacity: 0 }}, {{ scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }}, {SPLIT + 0.1:.2f});
-      tl.fromTo("#num-der", {{ scale: 0.3, opacity: 0 }}, {{ scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }}, {SPLIT + 0.22:.2f});
 
       // cierre
       tl.fromTo("#cierre", {{ x: 1080 }}, {{ x: 0, duration: {PUSH}, ease: "power3.inOut" }}, {CIERRE - PUSH:.2f});
