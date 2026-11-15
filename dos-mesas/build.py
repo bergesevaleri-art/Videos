@@ -16,7 +16,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent
 SR = 44100
 BEAT = 0.5
-DUR = 19.5
+DUR = 18.0
 PUSH = 0.3
 
 # ---------------------------------------------------------------- grilla
@@ -29,7 +29,7 @@ MESAS = [
      ["fresco", "prolijo", "para todos los días", "con onda", "siempre elegante"]),
 ]
 START = MESAS[0][1]
-SPLIT, SPLIT_END = 14.5, 16.9
+SPLIT, SPLIT_END = 14.5, 18.0
 CIERRE = SPLIT_END
 
 
@@ -41,15 +41,29 @@ def typed(text, start, step):
     return out
 
 
-H1, H2 = "el gris tiene mala fama..", "y no se la merece"
-th1 = typed(H1, 0.06, 0.042)
-th2 = typed(H2, th1[-1] + 0.1, 0.042)
-names_t = [typed(n, s + 0.15, 0.055) for n, s, _, _ in MESAS]
-Q1, Q2 = "lo simple en gris", "es superior"
-tq1 = typed(Q1, SPLIT + 0.2, 0.05)
-tq2 = typed(Q2, tq1[-1] + 0.12, 0.05)
-CTA1, CTA2 = "comentá GRIS", "y armamos la tuya"
-tc = typed(CTA1, CIERRE + 0.55, 0.055)
+# Un solo texto en el centro y una frase de cierre; las palabras con * van en cursiva.
+SENAL = [["esta es tu ", "*señal"], ["para renovar tu ", "*vajilla"]]
+FRASE = [["lo simple en ", "*gris"], ["es superior"]]
+SENAL_T0, TECLA = 0.15, 0.045
+FRASE_T = SPLIT + 0.4                    # aparece con los brillitos
+
+
+def chars(lines):
+    """Letras en orden, con su marca de cursiva."""
+    out = []
+    for li, parts in enumerate(lines):
+        for part in parts:
+            acc = part.startswith("*")
+            for ch in part.lstrip("*"):
+                out.append((li, ch, acc))
+    return out
+
+
+senal_chars = chars(SENAL)
+senal_t, t = [], SENAL_T0
+for _, ch, _ in senal_chars:
+    senal_t.append(round(t, 3))
+    t += TECLA * (0.5 if ch == " " else 1)
 
 # ---------------------------------------------------------------- audio
 rng = np.random.default_rng(11)
@@ -83,10 +97,9 @@ def write_m4a(buf, name, rms_db=None, peak=0.89):
 # efectos
 sfx = np.zeros((int(DUR * SR), 2), dtype=np.float32)
 key, pop, wsh, clk = load("key-press.mp3"), load("pop.mp3"), load("whoosh-short.mp3"), load("click-soft.mp3")
-for text, times in [(H1, th1), (H2, th2), (Q1, tq1), (Q2, tq2), (CTA1, tc)] + [(n, t) for (n, _, _, _), t in zip(MESAS, names_t)]:
-    for ch, t in zip(text, times):
-        if ch != " ":
-            place(sfx, key, t, 0.5 * rng.uniform(0.8, 1.0))
+for (_, ch, _), t in zip(senal_chars, senal_t):
+    if ch != " ":
+        place(sfx, key, t, 0.5 * rng.uniform(0.8, 1.0))
 for _, t in HOOK[1:]:
     place(sfx, clk, t, 0.5)
 for _, s, shots, _ in MESAS:
@@ -95,9 +108,9 @@ for _, s, shots, _ in MESAS:
     for _, d in shots[:-1]:
         t += d
         place(sfx, clk, t, 0.35)
-for b in (MESAS[1][1], SPLIT, CIERRE):
+for b in (MESAS[1][1], SPLIT):
     place(sfx, wsh, b - PUSH - 0.05, 0.8)
-place(sfx, load("sparkle.mp3"), CIERRE + 0.2, 0.6)
+place(sfx, load("sparkle.mp3"), FRASE_T - 0.05, 0.75)   # brillitos de la frase final
 write_m4a(sfx, "sfx.m4a")
 
 # música original, 120 bpm, pensada para que se escuche bien en el parlante del celular
@@ -195,14 +208,26 @@ write_m4a(mus, "musica.m4a", rms_db=-15)
 # ---------------------------------------------------------------- html
 
 
-def spans(text, p):
-    return "".join(f'<span id="{p}{i}" class="ch">{"&nbsp;" if c == " " else html.escape(c)}</span>' for i, c in enumerate(text))
+def rich(lines, prefix=None):
+    """Arma las líneas; con prefix cada letra es un span (para escribirla de a una)."""
+    out, i = [], 0
+    for parts in lines:
+        row = ""
+        for part in parts:
+            acc = part.startswith("*")
+            txt = part.lstrip("*")
+            if prefix:
+                inner = "".join(f'<span id="{prefix}{i + j}" class="ch">{"&nbsp;" if c == " " else html.escape(c)}</span>' for j, c in enumerate(txt))
+                i += len(txt)
+            else:
+                inner = html.escape(txt).replace(" ", "&nbsp;")
+            row += f'<span class="acento">{inner}</span>' if acc else inner
+        out.append(f"<div>{row}</div>")
+    return "".join(out)
 
 
-sets = [(f"#a{i}", t) for i, t in enumerate(th1)] + [(f"#b{i}", t) for i, t in enumerate(th2)]
-sets += [(f"#q{i}", t) for i, t in enumerate(tq1)] + [(f"#r{i}", t) for i, t in enumerate(tq2)] + [(f"#c{i}", t) for i, t in enumerate(tc)]
-
-videos, textos, js = "", "", []
+sets = [(f"#s{i}", t) for i, t in enumerate(senal_t)]
+videos, js = "", []
 for clip, t in HOOK:
     videos += f'''
       <video id="v-{clip}" class="clip toma" src="assets/clips/{clip}.mp4" muted playsinline data-start="{t:.2f}" data-duration="0.5" data-track-index="0"></video>'''
@@ -210,38 +235,22 @@ for clip, t in HOOK:
     js.append(f'tl.set("#flash", {{ opacity: 0.55 }}, {t:.2f});')
     js.append(f'tl.to("#flash", {{ opacity: 0, duration: 0.14, ease: "power1.out" }}, {t:.2f});')
 
-for k, ((name, s, shots, words), nt) in enumerate(zip(MESAS, names_t), 1):
-    sets += [(f"#n{k}c{i}", t) for i, t in enumerate(nt)]
+for k, (name, s, shots, words) in enumerate(MESAS, 1):
     t = s
-    cortes = ""
-    for j, ((clip, d), w) in enumerate(zip(shots, words)):
-        cortes += f'<div class="corte" id="w{k}-{j}">{html.escape(w)}</div>'
-        js.append(f'tl.set("#w{k}-{j}", {{ opacity: 1 }}, {t + 0.05:.2f});')
-        js.append(f'tl.fromTo("#w{k}-{j}", {{ scale: 0.6 }}, {{ scale: 1, duration: 0.3, ease: "back.out(2.4)" }}, {t + 0.05:.2f});')
-        if j < len(shots) - 1:
-            js.append(f'tl.set("#w{k}-{j}", {{ opacity: 0 }}, {t + d:.2f});')
+    for j, (clip, d) in enumerate(shots):
         pre = PUSH if (j == 0 and k > 1) else 0.0
         videos += f'''
       <video id="v-{clip}" class="clip toma" src="assets/clips/{clip}.mp4" muted playsinline data-start="{t - pre:.2f}" data-duration="{d + pre:.2f}" data-track-index="0"></video>'''
-        # zoom de impacto en cada corte y deriva lenta
         js.append(f'tl.fromTo("#v-{clip}", {{ scale: 1.14 }}, {{ scale: 1.0, duration: 0.35, ease: "power3.out" }}, {t:.2f});')
         js.append(f'tl.to("#v-{clip}", {{ scale: 1.05, duration: {d - 0.35:.2f}, ease: "none" }}, {t + 0.35:.2f});')
         t += d
-    L = t - s
-    textos += f'''
-      <div id="t-mesa{k}" class="clip momento" data-start="{s:.2f}" data-duration="{L:.2f}" data-track-index="2" data-track-kind="graphics">
-        <div class="velo"></div>
-        <div class="nombre">{spans(name, f"n{k}c")}</div>
-        {cortes}
-      </div>'''
 
-# transición mesa 1 → mesa 2: el video nuevo empuja al anterior
-js.append(f'tl.to(["#v-m1e", "#t-mesa1"], {{ x: -1080, duration: {PUSH}, ease: "power3.inOut" }}, {MESAS[1][1] - PUSH:.2f});')
+js.append(f'tl.to("#v-m1e", {{ x: -1080, duration: {PUSH}, ease: "power3.inOut" }}, {MESAS[1][1] - PUSH:.2f});')
 js.append(f'tl.fromTo("#v-m2a", {{ x: 1080 }}, {{ x: 0, duration: {PUSH}, ease: "power3.inOut" }}, {MESAS[1][1] - PUSH:.2f});')
-js.append(f'tl.set("#t-mesa2", {{ x: 0 }}, {MESAS[1][1]:.2f});')
 
 set_js = "\n".join(f'      tl.set("{a}", {{ opacity: 1 }}, {t});' for a, t in sets)
 all_js = "\n".join("      " + x for x in js)
+SENAL_END = SPLIT - PUSH
 
 doc = f'''<!doctype html>
 <html lang="es">
@@ -251,6 +260,7 @@ doc = f'''<!doctype html>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
       @font-face {{ font-family: "Comfortaa"; src: url("assets/fonts/Comfortaa-VariableFont_wght.ttf") format("truetype"); font-weight: 100 900; }}
+      @font-face {{ font-family: "Playfair Display Italic"; src: url("assets/fonts/playfair-display-latin-500-italic.woff2") format("woff2"); font-weight: 500; font-style: italic; }}
       /* paleta del design system Nido */
       :root {{ --pincipal: #9b4c26; --secundario: #7b745a; --terciario: #e0b7a6; --blanco: #ffffff; }}
       * {{ margin: 0; padding: 0; box-sizing: border-box; }}
@@ -258,29 +268,17 @@ doc = f'''<!doctype html>
       body {{ font-family: "Comfortaa", sans-serif; color: var(--pincipal); }}
       .ch {{ opacity: 0; }}
       .toma {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; z-index: 1; }}
-      .velo {{ position: absolute; left: 0; top: 0; width: 1080px; height: 640px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.74) 62%, rgba(255,255,255,0) 100%); }}
-
       #flash {{ position: absolute; inset: 0; background: var(--blanco); opacity: 0; z-index: 4; }}
-      #gancho {{ position: absolute; inset: 0; z-index: 3; }}
-      #gancho-texto {{ position: absolute; left: 0; top: 250px; width: 1080px; text-align: center; font-size: 76px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; }}
-
-      .momento {{ position: absolute; inset: 0; z-index: 3; }}
-      .nombre {{ position: absolute; left: 0; top: 230px; width: 1080px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: -0.02em; }}
-      .corte {{ position: absolute; left: 0; top: 370px; width: 1080px; text-align: center; font-size: 60px; font-weight: 600; opacity: 0; color: var(--secundario); }}
-
-      #comparar {{ position: absolute; inset: 0; z-index: 6; }}
       .mitad {{ position: absolute; top: 0; width: 537px; height: 1920px; object-fit: cover; z-index: 5; }}
       #v-s1 {{ left: 0; }} #v-s2 {{ left: 543px; }}
-      #pregunta {{ position: absolute; left: 0; top: 240px; width: 1080px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; }}
 
-      #cierre {{ position: absolute; inset: 0; z-index: 6; background: var(--blanco); overflow: hidden; }}
-      #fondo {{ position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; opacity: 0.28; }}
-      #logo {{ position: absolute; left: 370px; top: 540px; width: 340px; height: auto; }}
-      #cta1 {{ position: absolute; left: 0; top: 860px; width: 1080px; text-align: center; font-size: 100px; font-weight: 700; letter-spacing: -0.02em; }}
-      #cta2 {{ position: absolute; left: 0; top: 1000px; width: 1080px; text-align: center; font-size: 50px; font-weight: 500; }}
-      #star-a {{ position: absolute; left: 140px; top: 450px; width: 70px; height: 70px; }}
-      #star-b {{ position: absolute; left: 860px; top: 1140px; width: 48px; height: 48px; }}
+      /* textos en el centro, sin velos: un borde blanco nítido los separa de la imagen */
+      .texto {{ position: absolute; left: 0; width: 1080px; text-align: center; font-weight: 700; letter-spacing: -0.02em; line-height: 1.32;
+        -webkit-text-stroke: 10px var(--blanco); paint-order: stroke fill; }}
+      .acento {{ font-family: "Playfair Display Italic", serif; font-style: italic; font-weight: 500; letter-spacing: 0; font-size: 1.22em; }}
+      #senal {{ top: 850px; font-size: 64px; }}
+      #frase {{ top: 860px; font-size: 58px; }}
+      #capa-senal, #capa-frase {{ position: absolute; inset: 0; z-index: 7; }}
     </style>
   </head>
   <body>
@@ -288,50 +286,35 @@ doc = f'''<!doctype html>
       <audio id="musica" class="clip" src="assets/audio/musica.m4a" data-start="0" data-duration="{DUR:.2f}" data-track-index="10" data-volume="1"></audio>
       <audio id="efectos" class="clip" src="assets/audio/sfx.m4a" data-start="0" data-duration="{DUR:.2f}" data-track-index="11" data-volume="0.8"></audio>
 {videos}
-
-      <div id="gancho" class="clip" data-start="0" data-duration="{START:.2f}" data-track-index="2" data-track-kind="graphics">
-        <div class="velo"></div>
-        <div id="gancho-texto"><div>{spans(H1, "a")}</div><div>{spans(H2, "b")}</div></div>
-      </div>
       <div id="flash" class="clip" data-start="0" data-duration="{START:.2f}" data-track-index="4" data-track-kind="graphics"></div>
-{textos}
 
       <video id="v-s1" class="clip mitad" src="assets/clips/s1.mp4" muted playsinline data-start="{SPLIT - PUSH:.2f}" data-duration="{SPLIT_END - SPLIT + PUSH:.2f}" data-track-index="0"></video>
       <video id="v-s2" class="clip mitad" src="assets/clips/s2.mp4" muted playsinline data-start="{SPLIT - PUSH:.2f}" data-duration="{SPLIT_END - SPLIT + PUSH:.2f}" data-track-index="0"></video>
-      <div id="comparar" class="clip" data-start="{SPLIT - PUSH:.2f}" data-duration="{SPLIT_END - SPLIT + PUSH:.2f}" data-track-index="3" data-track-kind="graphics">
-        <div class="velo"></div>
-        <div id="pregunta"><div>{spans(Q1, "q")}</div><div>{spans(Q2, "r")}</div></div>
-      </div>
 
-      <div id="cierre" class="clip" data-start="{CIERRE - PUSH:.2f}" data-duration="{DUR - CIERRE + PUSH:.2f}" data-track-index="5" data-track-kind="graphics">
-        <img id="fondo" src="assets/fotos/fondo.jpg" alt="" />
-        <img id="star-a" src="assets/brand/estrella.png" alt="" />
-        <img id="logo" src="assets/brand/logo-nido-home-deco-pincipal.png" alt="nido home &amp; deco" />
-        <div id="cta1">{spans(CTA1, "c")}</div>
-        <div id="cta2">{CTA2}</div>
-        <img id="star-b" src="assets/brand/estrella.png" alt="" />
+      <div id="capa-senal" class="clip" data-start="0" data-duration="{SENAL_END:.2f}" data-track-index="6" data-track-kind="graphics">
+        <div id="senal" class="texto">{rich(SENAL, "s")}</div>
+      </div>
+      <div id="capa-frase" class="clip" data-start="{FRASE_T:.2f}" data-duration="{DUR - FRASE_T:.2f}" data-track-index="6" data-track-kind="graphics">
+        <div id="frase" class="texto">{rich(FRASE)}</div>
       </div>
     </div>
 
     <script>
       const tl = gsap.timeline({{ paused: true }});
 
-      // cortes, zooms de impacto y números
+      // cortes y zooms de impacto
 {all_js}
 
-      // escritura letra por letra (cada letra tiene su golpe de tecla en la pista de efectos)
+      // "esta es tu señal…" se escribe letra por letra, con su golpe de tecla
 {set_js}
+      tl.to("#senal", {{ opacity: 0, duration: 0.2, ease: "power1.in" }}, {SENAL_END - 0.22:.2f});
 
-      // comparación: las dos mitades entran desde arriba y desde abajo
+      // las dos mitades entran desde arriba y desde abajo
       tl.fromTo("#v-s1", {{ y: -1920 }}, {{ y: 0, duration: {PUSH + 0.1}, ease: "power3.out" }}, {SPLIT - PUSH:.2f});
       tl.fromTo("#v-s2", {{ y: 1920 }}, {{ y: 0, duration: {PUSH + 0.1}, ease: "power3.out" }}, {SPLIT - PUSH:.2f});
 
-      // cierre
-      tl.fromTo("#cierre", {{ x: 1080 }}, {{ x: 0, duration: {PUSH}, ease: "power3.inOut" }}, {CIERRE - PUSH:.2f});
-      tl.fromTo("#fondo", {{ scale: 1.1 }}, {{ scale: 1.0, duration: {DUR - CIERRE:.2f}, ease: "none" }}, {CIERRE:.2f});
-      tl.fromTo("#logo", {{ opacity: 0, y: 24 }}, {{ opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }}, {CIERRE + 0.15:.2f});
-      tl.fromTo("#cta2", {{ opacity: 0, y: 12 }}, {{ opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }}, {CIERRE + 0.45:.2f});
-      tl.fromTo(["#star-a", "#star-b"], {{ rotation: -60, scale: 0.4, opacity: 0 }}, {{ rotation: 0, scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.6)", stagger: 0.12 }}, {CIERRE + 0.25:.2f});
+      // frase final con brillitos
+      tl.fromTo("#frase", {{ opacity: 0, scale: 0.9 }}, {{ opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" }}, {FRASE_T:.2f});
 
       window.__timelines["main"] = tl;
     </script>
@@ -339,4 +322,4 @@ doc = f'''<!doctype html>
 </html>
 '''
 (ROOT / "index.html").write_text(doc)
-print(json.dumps({"dur": DUR, "hook_end": th2[-1], "cta_end": tc[-1]}))
+print(json.dumps({"dur": DUR, "senal_end_typing": senal_t[-1], "frase": FRASE_T}))
